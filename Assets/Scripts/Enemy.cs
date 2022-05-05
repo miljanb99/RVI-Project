@@ -20,27 +20,46 @@ public class Enemy : MonoBehaviour
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
+        SetEnemyValues();
     }
 
     // Update is called once per frame
     void Update()
     {
-        Attack();
+        Swarm();
     }
 
-    private void Attack()
+    private void SetEnemyValues()
+    {
+        GetComponent<Health>().SetHealth(data.hp, data.hp);
+        damage = data.damage;
+        speed = data.speed;
+    }
+
+    private void Swarm()
     {
         transform.position = Vector2.MoveTowards(transform.position, player.transform.position, speed * Time.deltaTime);
+    }
+
+    private void OnCollisionEnter2D(Collision2D coll)
+    {
+        // If the Collider2D component is enabled on the collided object
+        if (coll.collider == true)
+        {
+            // Disables the Collider2D component
+            coll.collider.enabled = false;
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collider)
     {
         if (collider.CompareTag("Player"))
         {
-            // no health just debug
-            Debug.Log("Hit for " + damage);
-            // shoud i destroy this enemy?
-            Destroy(this);
+            if(collider.GetComponent<Health>() != null)
+            {
+                collider.GetComponent<Health>().Damage(damage);
+                this.GetComponent<Health>().Damage(100000);
+            }
         }
     }
 }
