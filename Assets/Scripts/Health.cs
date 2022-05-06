@@ -12,7 +12,17 @@ public class Health : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            Heal(10);
+        }
+    }
 
+    private IEnumerator VisualIndicator(Color color)
+    {
+        GetComponent<SpriteRenderer>().color = color;
+        yield return new WaitForSeconds(0.2f);
+        GetComponent<SpriteRenderer>().color = Color.white;
     }
 
     public void SetHealth(int maxHealth, int health)
@@ -29,6 +39,7 @@ public class Health : MonoBehaviour
 
         Debug.Log("Damage given! " + amount);
         this.health -= amount;
+        StartCoroutine(VisualIndicator(Color.red));
 
         if(health <= 0)
         {
@@ -44,8 +55,9 @@ public class Health : MonoBehaviour
         }
 
         bool wouldBeOverMaxHealth = health + amount > MAX_HEALTH;
-
+        StartCoroutine(VisualIndicator(Color.green));
         Debug.Log("Healed");
+
 
         if (wouldBeOverMaxHealth)
         {
