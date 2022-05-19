@@ -2,27 +2,50 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Controller2D))]
 public class PlayerController : MonoBehaviour
 {
-    
-    float horizontal;
-    int speed = 5;
-    int jumpCount = 0;
+    public float jumpHeight = 4;
+    public float timeToHighestJumpPoint = 0.4f;
 
-    void Update()
+    float moveSpeed = 6;
+    float jumpSpeed = 8;
+    float gravity = -20;
+
+    Vector3 playerVelocity;
+    Vector2 playerMoveInput;
+    bool playerJumpInput;
+
+    Controller2D controller;
+
+    private void Start()
     {
-        horizontal = Input.GetAxisRaw("Horizontal");
-        GetComponent<Rigidbody2D>().velocity = new Vector3(horizontal * speed, GetComponent<Rigidbody2D>().velocity.y);
+        controller = GetComponent<Controller2D>();
 
-        if (Input.GetKeyDown(KeyCode.Space) && jumpCount <= 2)
-        {
-            GetComponent<Rigidbody2D>().AddForce(new Vector2(0, 200));
-            jumpCount++;
-        }
+        gravity = -(2 * jumpHeight) / Mathf.Pow(timeToHighestJumpPoint,2);
+        jumpSpeed = Mathf.Abs(gravity) * timeToHighestJumpPoint;
     }
 
-    public void OnCollisionEnter2D(Collision2D other)
+    private void Update()
     {
-        jumpCount = 0;
+        playerMoveInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        playerJumpInput = Input.GetButton("Jump");
+    }
+
+    private void FixedUpdate()
+    {
+        playerVelocity.x = playerMoveInput.x * moveSpeed;
+
+        if (controller.collisionInfo.below || controller.collisionInfo.above)
+        {
+            playerVelocity.y = 0;
+        }
+        if(playerJumpInput && controller.collisionInfo.below)
+        {
+            playerVelocity.y = jumpSpeed;
+        }
+        playerVelocity.y += gravity * Time.deltaTime;
+
+        controller.Move(playerVelocity * Time.deltaTime);
     }
 }
