@@ -38,14 +38,17 @@ public class EnemySpawner : MonoBehaviour
 
     private IEnumerator spawnEnemy(float interval, GameObject enemy)
     {
-        if(enemiesSpawned <= MAX_ENEMY_SPAWNED)
+        while (true)
         {
-            yield return new WaitForSeconds(interval);
-            int randSpawnPoint = Random.Range(0, spawnPoints.Length);
+            if (enemiesSpawned <= MAX_ENEMY_SPAWNED)
+            {
+                yield return new WaitForSeconds(interval);
+                int randSpawnPoint = Random.Range(0, spawnPoints.Length);
 
-            GameObject newEnemy = Instantiate(enemy, spawnPoints[randSpawnPoint].position, Quaternion.identity);
-            enemiesSpawned += 1;
-            StartCoroutine(spawnEnemy(interval, newEnemy));
+                GameObject newEnemy = Instantiate(enemy, spawnPoints[randSpawnPoint].position, Quaternion.identity);
+                enemiesSpawned += 1;
+                //StartCoroutine(spawnEnemy(interval, newEnemy));
+            }
         }
      }
 }

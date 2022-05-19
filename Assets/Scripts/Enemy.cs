@@ -40,7 +40,7 @@ public class Enemy : MonoBehaviour
     {
         transform.position = Vector2.MoveTowards(transform.position, player.transform.position, speed * Time.deltaTime);
     }
-
+    /*
     private void OnCollisionEnter2D(Collision2D coll)
     {
         // If the Collider2D component is enabled on the collided object
@@ -50,6 +50,7 @@ public class Enemy : MonoBehaviour
             coll.collider.enabled = false;
         }
     }
+    */
 
     private void OnTriggerEnter2D(Collider2D collider)
     {
