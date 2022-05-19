@@ -8,25 +8,29 @@ public class Enemy : MonoBehaviour
     private int damage = 5;
 
     [SerializeField]
-    private float speed = 1.5f;
+    private float speed = 5f;
 
     [SerializeField]
     private EnemyData data;
 
     private GameObject player;
 
+    private Controller2D controller;
+    private float gravity;
+    private float jumpSpeed; 
+    Vector3 enemyVelocity;
+    Vector2 enemyMoveTarget;
+    bool isFlying;
+    bool shouldJump;
+
 
     // Start is called before the first frame update
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
+        controller = GetComponent<Controller2D>();
         SetEnemyValues();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        Swarm();
+        StartCoroutine(EnemyMovement());
     }
 
     private void SetEnemyValues()
@@ -34,33 +38,42 @@ public class Enemy : MonoBehaviour
         GetComponent<Health>().SetHealth(data.hp, data.hp);
         damage = data.damage;
         speed = data.speed;
+        gravity = player.GetComponent<PlayerController>().gravity;
+        jumpSpeed = player.GetComponent<PlayerController>().jumpSpeed;
     }
 
-    private void Swarm()
+    private IEnumerator EnemyMovement()
     {
-        transform.position = Vector2.MoveTowards(transform.position, player.transform.position, speed * Time.deltaTime);
-    }
-    /*
-    private void OnCollisionEnter2D(Collision2D coll)
-    {
-        // If the Collider2D component is enabled on the collided object
-        if (coll.collider == true)
+        while (true)
         {
-            // Disables the Collider2D component
-            coll.collider.enabled = false;
+            enemyMoveTarget = new Vector2((player.transform.position - transform.position).x, 0).normalized;
+            yield return new WaitForSeconds(2);
         }
     }
-    */
 
-    private void OnTriggerEnter2D(Collider2D collider)
+    private void FixedUpdate()
     {
-        if (collider.CompareTag("Player"))
+        enemyVelocity.x = enemyMoveTarget.x * speed;
+
+        if (controller.collisionInfo.below || controller.collisionInfo.above)
         {
-            if(collider.GetComponent<Health>() != null)
-            {
-                collider.GetComponent<Health>().Damage(damage);
-                this.GetComponent<Health>().Damage(100000);
-            }
+            enemyVelocity.y = 0;
+        }
+        if (shouldJump && controller.collisionInfo.below)
+        {
+            enemyVelocity.y = jumpSpeed;
+        }
+        enemyVelocity.y += gravity * Time.deltaTime;
+
+        controller.Move(enemyVelocity * Time.deltaTime);
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(collision.collider.CompareTag("Bullet"))
+        {
+
+            GetComponent<Health>().Damage(collision.collider.GetComponent<Bullet>().damage);
         }
     }
 }

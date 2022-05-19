@@ -31,7 +31,8 @@ public class PlayerShootingController : MonoBehaviour
         if(Input.GetMouseButtonDown(0))
         {
             Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            Vector3 shootDirection = (mousePos - weapon.GetChild(0).position).normalized;
+            Vector3 shootDirection = (mousePos - weapon.position);
+            shootDirection = new Vector3(shootDirection.x, shootDirection.y, 0).normalized;
             float shootAngle = Mathf.Atan2(shootDirection.y, shootDirection.x) * Mathf.Rad2Deg;
             Rigidbody2D bullet = Instantiate(bulletPrefab, weapon.GetChild(0).position, Quaternion.Euler(0, 0, shootAngle));
             bullet.velocity = shootDirection * bulletSpeed;

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,8 +10,10 @@ public class PlayerController : MonoBehaviour
     public float timeToHighestJumpPoint = 0.4f;
 
     float moveSpeed = 6;
-    float jumpSpeed = 8;
-    float gravity = -20;
+    [HideInInspector]
+    public float jumpSpeed = 8;
+    [HideInInspector]
+    public float gravity = -20;
 
     Vector3 playerVelocity;
     Vector2 playerMoveInput;
@@ -47,5 +50,10 @@ public class PlayerController : MonoBehaviour
         playerVelocity.y += gravity * Time.deltaTime;
 
         controller.Move(playerVelocity * Time.deltaTime);
+    }
+
+    internal void TakeDamage(int damage)
+    {
+        GetComponent<Health>().Damage(damage);
     }
 }

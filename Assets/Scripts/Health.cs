@@ -37,7 +37,6 @@ public class Health : MonoBehaviour
             throw new System.ArgumentOutOfRangeException("Cannot have negative Damage");
         }
 
-        Debug.Log("Damage given! " + amount);
         this.health -= amount;
         StartCoroutine(VisualIndicator(Color.red));
 
@@ -56,7 +55,6 @@ public class Health : MonoBehaviour
 
         bool wouldBeOverMaxHealth = health + amount > MAX_HEALTH;
         StartCoroutine(VisualIndicator(Color.green));
-        Debug.Log("Healed");
 
 
         if (wouldBeOverMaxHealth)
@@ -71,7 +69,6 @@ public class Health : MonoBehaviour
 
     private void Die()
     {
-        Debug.Log("I am Dead!");
         Destroy(gameObject);
     }
 }

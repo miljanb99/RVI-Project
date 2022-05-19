@@ -26,7 +26,7 @@ public class EnemySpawner : MonoBehaviour
     private float slowStrongEnemyInterval = 10f;
 
     private int enemiesSpawned = 0;
-    private int MAX_ENEMY_SPAWNED = 4;
+    private int MAX_ENEMY_SPAWNED = 20;
 
     // Start is called before the first frame update
     void Start()
@@ -40,14 +40,17 @@ public class EnemySpawner : MonoBehaviour
     {
         while (true)
         {
+            yield return new WaitForSeconds(interval);
             if (enemiesSpawned <= MAX_ENEMY_SPAWNED)
             {
-                yield return new WaitForSeconds(interval);
                 int randSpawnPoint = Random.Range(0, spawnPoints.Length);
 
                 GameObject newEnemy = Instantiate(enemy, spawnPoints[randSpawnPoint].position, Quaternion.identity);
                 enemiesSpawned += 1;
-                //StartCoroutine(spawnEnemy(interval, newEnemy));
+            }
+            else
+            {
+                break;
             }
         }
      }
