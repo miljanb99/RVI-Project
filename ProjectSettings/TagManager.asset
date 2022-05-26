@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Bullet
   - Enemy
+  - Trap
+  - Level1Boss
   layers:
   - Default
   - TransparentFX
