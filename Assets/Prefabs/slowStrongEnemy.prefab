@@ -126,6 +126,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 100
+  objectToDestroy: {fileID: 6871202959324685056}
 --- !u!114 &6871202959324685057
 MonoBehaviour:
   m_ObjectHideFlags: 0

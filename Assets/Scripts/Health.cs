@@ -6,6 +6,8 @@ public class Health : MonoBehaviour
 {
     [SerializeField]
     private int health = 100;
+    [SerializeField]
+    private GameObject objectToDestroy;
 
     private int MAX_HEALTH = 100;
 
@@ -25,11 +27,12 @@ public class Health : MonoBehaviour
         GetComponent<SpriteRenderer>().color = Color.white;
     }
 
-    public void SetHealth(int maxHealth, int health)
+    public void Start()
     {
-        this.MAX_HEALTH = maxHealth;
+        this.MAX_HEALTH = health;
         this.health = health;
     }
+
     public void Damage(int amount)
     {
         if(amount < 0)
@@ -69,6 +72,6 @@ public class Health : MonoBehaviour
 
     private void Die()
     {
-        Destroy(gameObject);
+        Destroy(objectToDestroy);
     }
 }

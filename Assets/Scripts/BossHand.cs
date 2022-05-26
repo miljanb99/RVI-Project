@@ -7,24 +7,25 @@ public class BossHand : MonoBehaviour
     [SerializeField] private GameObject[] waypoints;
     private int currentWaypointIndex = 0;
 
-    [SerializeField] private float speed = 1.0f;
+    [SerializeField] private float speed = 5f;
+    private float speedMultiplier = 1;
 
-    private bool attacking = false;
+    private GameObject player;
+    private Vector3 movementTarget;
+    private bool isAttacking = false;
+
 
     private void Start()
     {
-
-       StartCoroutine(StartCountdown());
+        player = GameObject.FindGameObjectWithTag("Player");
+        movementTarget = waypoints[0].transform.position;
+        StartCoroutine(StartAttacking());
     }
+
     private void Update()
     {
-        if(currCountdownValue == 0)
+        if (Vector2.Distance(waypoints[currentWaypointIndex].transform.position, transform.position) < .1f)
         {
-            attacking = true;
-        }
-
-         if (Vector2.Distance(waypoints[currentWaypointIndex].transform.position, transform.position) < .1f)
-         {
             currentWaypointIndex++;
             if (currentWaypointIndex >= waypoints.Length)
             {
@@ -32,40 +33,38 @@ public class BossHand : MonoBehaviour
             }
         }
 
-        if (attacking)
-        {
-            StartCoroutine(StartAttack());
-        }
+        if (!isAttacking) movementTarget = waypoints[currentWaypointIndex].transform.position;
         else
         {
-            //transform.position = new Vector2((transform.position - waypoints[currentWaypointIndex].transform.position).x, 0).normalized;
-            transform.position = Vector2.MoveTowards(transform.position, waypoints[currentWaypointIndex].transform.position, Time.deltaTime * speed);
-           
+            if (Vector2.Distance(movementTarget, transform.position) < .1f) EndAttack();
         }
-    }
-    
-    private float currCountdownValue;
-    private IEnumerator StartCountdown(float countdownValue = 5)
-    {
-        currCountdownValue = countdownValue;
-        while (currCountdownValue > 0)
-        {
-            Debug.Log("Countdown: " + currCountdownValue);
-            yield return new WaitForSeconds(1.0f);
-            currCountdownValue--;
-        }
+        transform.position = Vector2.MoveTowards(transform.position, movementTarget, Time.deltaTime * speed * speedMultiplier);
+
     }
     
 
-    private IEnumerator StartAttack()
+    private IEnumerator StartAttacking()
     {
-        attacking = true;
-        transform.Translate(new Vector3(0, -1.0f, 0) * Time.deltaTime * speed);
-        yield return new WaitForSeconds(1.0f);
-        transform.Translate(new Vector3(0, 1.0f, 0) * Time.deltaTime * speed);
-        yield return new WaitForSeconds(0.5f);
-        currCountdownValue = 1000;
-        attacking = false;
+        yield return new WaitForSeconds(Random.Range(2, 5));
+
+        while(true)
+        {
+            Attack();
+            yield return new WaitForSeconds(Random.Range(5, 10));
+        }
         
     } 
+
+    public void Attack()
+    {
+        speedMultiplier = 3;
+        movementTarget = player.transform.position;
+        isAttacking = true;
+    }
+
+    public void EndAttack()
+    {
+        speedMultiplier = 1;
+        isAttacking = false;
+    }
 }
