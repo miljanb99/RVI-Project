@@ -15,7 +15,10 @@ public class Enemy : MonoBehaviour
 
     private GameObject player;
 
+    private HealthBar healthBar;
+
     private Controller2D controller;
+    
     private float gravity;
     private float jumpSpeed; 
     Vector3 enemyVelocity;
@@ -30,6 +33,7 @@ public class Enemy : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player");
         controller = GetComponent<Controller2D>();
         SetEnemyValues();
+
         StartCoroutine(EnemyMovement());
     }
 
@@ -37,6 +41,7 @@ public class Enemy : MonoBehaviour
     {
         damage = data.damage;
         speed = data.speed;
+        GetComponent<Health>().setHealth(data.hp);
         gravity = player.GetComponent<PlayerController>().gravity;
         jumpSpeed = player.GetComponent<PlayerController>().jumpSpeed;
     }

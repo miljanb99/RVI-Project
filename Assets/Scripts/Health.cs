@@ -5,9 +5,12 @@ using UnityEngine;
 public class Health : MonoBehaviour
 {
     [SerializeField]
-    private int health = 100;
+    private int health;
+
     [SerializeField]
     private GameObject objectToDestroy;
+
+    public HealthBar healthBar;
 
     private int MAX_HEALTH = 100;
 
@@ -29,8 +32,7 @@ public class Health : MonoBehaviour
 
     public void Start()
     {
-        this.MAX_HEALTH = health;
-        this.health = health;
+        healthBar.SetHealth(health, MAX_HEALTH);
     }
 
     public void Damage(int amount)
@@ -40,7 +42,9 @@ public class Health : MonoBehaviour
             throw new System.ArgumentOutOfRangeException("Cannot have negative Damage");
         }
 
-        this.health -= amount;
+        health -= amount;
+        healthBar.SetHealth(health, MAX_HEALTH);
+
         StartCoroutine(VisualIndicator(Color.red));
 
         if(health <= 0)
@@ -62,12 +66,17 @@ public class Health : MonoBehaviour
 
         if (wouldBeOverMaxHealth)
         {
-            this.health = MAX_HEALTH;
+            health = MAX_HEALTH;
         }
         else
         {
-            this.health += amount;
+            health += amount;
         }
+    }
+
+    public void setHealth(int amount)
+    {
+        health = amount;
     }
 
     private void Die()
