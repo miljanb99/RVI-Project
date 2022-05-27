@@ -21,6 +21,7 @@ public class Health : MonoBehaviour
         {
             Heal(10);
         }
+        
     }
 
     private IEnumerator VisualIndicator(Color color)
@@ -44,7 +45,7 @@ public class Health : MonoBehaviour
 
         health -= amount;
         healthBar.SetHealth(health, MAX_HEALTH);
-
+       
         StartCoroutine(VisualIndicator(Color.red));
 
         if(health <= 0)
@@ -80,7 +81,19 @@ public class Health : MonoBehaviour
     }
 
     private void Die()
-    {
+    {       
+        if(GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>() != null)
+        {
+            if (objectToDestroy.CompareTag("Level1Boss"))
+            {
+                GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>().bossDestroyed();
+            }
+            else
+            {
+                GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>().updateNumberOfKilledEnemies();
+            }
+        }
         Destroy(objectToDestroy);
     }
+
 }

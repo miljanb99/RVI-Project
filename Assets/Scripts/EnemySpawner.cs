@@ -25,15 +25,15 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField]
     private float slowStrongEnemyInterval = 10f;
 
-    private int enemiesSpawned = 0;
-    private int MAX_ENEMY_SPAWNED = 20;
+    public static int enemiesSpawned = 0;
+    public static int MAX_ENEMY_SPAWNED = 5;
 
     // Start is called before the first frame update
     void Start()
     {
         StartCoroutine(spawnEnemy(basicEnemyInterval, basicEnemyPrefab));
-        StartCoroutine(spawnEnemy(fastEnemyInterval, fastEnemyPrefab));
-        StartCoroutine(spawnEnemy(slowStrongEnemyInterval, slowStrongEnemyPrefab));
+        //StartCoroutine(spawnEnemy(fastEnemyInterval, fastEnemyPrefab));
+        //StartCoroutine(spawnEnemy(slowStrongEnemyInterval, slowStrongEnemyPrefab));
     }
 
     private IEnumerator spawnEnemy(float interval, GameObject enemy)
@@ -41,7 +41,7 @@ public class EnemySpawner : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(interval);
-            if (enemiesSpawned <= MAX_ENEMY_SPAWNED)
+            if (enemiesSpawned < MAX_ENEMY_SPAWNED)
             {
                 int randSpawnPoint = Random.Range(0, spawnPoints.Length);
 
@@ -54,4 +54,5 @@ public class EnemySpawner : MonoBehaviour
             }
         }
      }
+
 }

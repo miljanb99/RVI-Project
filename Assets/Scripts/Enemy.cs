@@ -18,7 +18,8 @@ public class Enemy : MonoBehaviour
     private HealthBar healthBar;
 
     private Controller2D controller;
-    
+
+
     private float gravity;
     private float jumpSpeed; 
     Vector3 enemyVelocity;
@@ -71,13 +72,15 @@ public class Enemy : MonoBehaviour
 
         controller.Move(enemyVelocity * Time.deltaTime);
     }
+ 
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if(collision.collider.CompareTag("Bullet"))
+        if (collision.collider.CompareTag("Bullet"))
         {
-
             GetComponent<Health>().Damage(collision.collider.GetComponent<Bullet>().damage);
         }
     }
+
+    
 }

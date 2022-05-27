@@ -383,7 +383,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0d863d89977d64438ce7a066c30ab8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 500
+  health: 100
   objectToDestroy: {fileID: 2730232418679198683}
   healthBar: {fileID: 7688081430193697463}
 --- !u!1 &2730232418443302660

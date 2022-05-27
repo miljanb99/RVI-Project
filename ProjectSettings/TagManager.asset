@@ -8,6 +8,7 @@ TagManager:
   - Enemy
   - Trap
   - Level1Boss
+  - VictoryScreen
   layers:
   - Default
   - TransparentFX

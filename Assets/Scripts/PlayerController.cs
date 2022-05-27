@@ -21,9 +21,14 @@ public class PlayerController : MonoBehaviour
 
     Controller2D controller;
 
+
+    public GameManager m_gameManager;
+    private int numberNumberOfKilledEnemies = 0;
+
     private void Start()
     {
         controller = GetComponent<Controller2D>();
+        Instantiate(m_gameManager);
 
         gravity = -(2 * jumpHeight) / Mathf.Pow(timeToHighestJumpPoint,2);
         jumpSpeed = Mathf.Abs(gravity) * timeToHighestJumpPoint;
@@ -55,5 +60,20 @@ public class PlayerController : MonoBehaviour
     internal void TakeDamage(int damage)
     {
         GetComponent<Health>().Damage(damage);
+    }
+
+    public void updateNumberOfKilledEnemies()
+    {
+        numberNumberOfKilledEnemies += 1;
+        Debug.Log(numberNumberOfKilledEnemies);
+        if (numberNumberOfKilledEnemies == 5)
+        {
+            StartCoroutine(m_gameManager.DestroyDoor());
+        }
+    }
+
+    public void bossDestroyed()
+    {
+        m_gameManager.Victory();
     }
 }

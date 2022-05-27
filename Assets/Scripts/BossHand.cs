@@ -19,11 +19,12 @@ public class BossHand : MonoBehaviour
     {
         player = GameObject.FindGameObjectWithTag("Player");
         movementTarget = waypoints[0].transform.position;
-        StartCoroutine(StartAttacking());
+        //StartCoroutine(StartAttacking());
     }
 
     private void Update()
     {
+
         if (Vector2.Distance(waypoints[currentWaypointIndex].transform.position, transform.position) < .1f)
         {
             currentWaypointIndex++;
@@ -43,7 +44,7 @@ public class BossHand : MonoBehaviour
     }
     
 
-    private IEnumerator StartAttacking()
+    public IEnumerator StartAttacking()
     {
         yield return new WaitForSeconds(Random.Range(2, 5));
 
