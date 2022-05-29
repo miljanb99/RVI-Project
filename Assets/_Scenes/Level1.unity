@@ -517,7 +517,8 @@ MonoBehaviour:
   m_player: {fileID: 1529793122630709902, guid: 3778554725347a04ca4f00392f293813, type: 3}
   m_door: {fileID: 1954299528}
   victoryScreen: {fileID: 975015853}
-  m_hand: {fileID: 845417869}
+  leftHand: {fileID: 845417869}
+  rightHand: {fileID: 1161684053}
 --- !u!4 &309176750
 Transform:
   m_ObjectHideFlags: 0
@@ -1406,6 +1407,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2931e7ea1fa76ff4fae7433475689bc9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1161684053 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2730232419226683808, guid: 26cb3270c39321b4aa4bdd075531dc65, type: 3}
+  m_PrefabInstance: {fileID: 845417868}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 735d8e5856698ba4faad1dfbea5d22e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1405277402
 GameObject:
   m_ObjectHideFlags: 0
@@ -2266,6 +2278,10 @@ PrefabInstance:
     - target: {fileID: 5335974313042237328, guid: 3778554725347a04ca4f00392f293813, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 5335974313042237328, guid: 3778554725347a04ca4f00392f293813, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5335974313042237330, guid: 3778554725347a04ca4f00392f293813, type: 3}
       propertyPath: m_IsTrigger

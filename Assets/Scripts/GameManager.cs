@@ -10,24 +10,25 @@ public class GameManager : MonoBehaviour
     public GameObject m_door;
     public GameObject victoryScreen;
 
-    public BossHand m_hand;
+    public BossHand leftHand;
+    public BossHand rightHand;
     
     public IEnumerator DestroyDoor()
     {
-       
+        m_door.GetComponent<SpriteRenderer>().enabled = false;
         while (true) {
-            Debug.Log(Vector2.Distance(GameObject.FindGameObjectWithTag("Player").transform.position, m_door.transform.position));
             if (Vector2.Distance(GameObject.FindGameObjectWithTag("Player").transform.position, m_door.transform.position) < 3.0f)
             {
                 Object.Destroy(m_door);
 
                 GameObject.FindGameObjectWithTag("MainCamera").transform.position = Vector3.Lerp(GameObject.FindGameObjectWithTag("MainCamera").transform.position, new Vector3(270.0f, 0, -10f), 0.1f);
-                StartCoroutine(m_hand.StartAttacking());
+                StartCoroutine(leftHand.StartAttacking());
+                StartCoroutine(rightHand.StartAttacking());
                 break;
             }
             else
             {
-                yield return new WaitForSeconds(1.0f);
+                yield return null;
             }
         }
     }

@@ -25,8 +25,8 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField]
     private float slowStrongEnemyInterval = 10f;
 
-    public static int enemiesSpawned = 0;
-    public static int MAX_ENEMY_SPAWNED = 5;
+    public int enemiesSpawned = 0;
+    public int MAX_ENEMY_SPAWNED = 5;
 
     // Start is called before the first frame update
     void Start()

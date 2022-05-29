@@ -174,7 +174,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5335974313042237332
 Transform:
   m_ObjectHideFlags: 0
@@ -303,6 +303,7 @@ MonoBehaviour:
   timeToHighestJumpPoint: 0.4
   jumpSpeed: 8
   gravity: -20
+  m_gameManager: {fileID: 0}
 --- !u!114 &6666726562963878538
 MonoBehaviour:
   m_ObjectHideFlags: 0

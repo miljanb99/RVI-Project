@@ -28,7 +28,6 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         controller = GetComponent<Controller2D>();
-        Instantiate(m_gameManager);
 
         gravity = -(2 * jumpHeight) / Mathf.Pow(timeToHighestJumpPoint,2);
         jumpSpeed = Mathf.Abs(gravity) * timeToHighestJumpPoint;
@@ -65,7 +64,6 @@ public class PlayerController : MonoBehaviour
     public void updateNumberOfKilledEnemies()
     {
         numberNumberOfKilledEnemies += 1;
-        Debug.Log(numberNumberOfKilledEnemies);
         if (numberNumberOfKilledEnemies == 5)
         {
             StartCoroutine(m_gameManager.DestroyDoor());
