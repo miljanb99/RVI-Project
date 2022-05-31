@@ -6,13 +6,29 @@ public class Health : MonoBehaviour
 {
     [SerializeField]
     private int health;
+    int maxHealth;
 
     [SerializeField]
     private GameObject objectToDestroy;
 
     public HealthBar healthBar;
 
-    private int MAX_HEALTH = 100;
+    private Color myColor;
+
+
+    private void Awake()
+    {
+        myColor = GetComponent<SpriteRenderer>().color;
+        maxHealth = health;
+        healthBar.SetHealth(health, maxHealth);
+    }
+
+    public void SetupMaxHP(int maxHealth = 100)
+    {
+        this.maxHealth = maxHealth;
+        health = maxHealth;
+        healthBar.SetHealth(health, maxHealth);
+    }
 
     // Update is called once per frame
     void Update()
@@ -28,12 +44,7 @@ public class Health : MonoBehaviour
     {
         GetComponent<SpriteRenderer>().color = color;
         yield return new WaitForSeconds(0.2f);
-        GetComponent<SpriteRenderer>().color = Color.white;
-    }
-
-    public void Start()
-    {
-        healthBar.SetHealth(health, MAX_HEALTH);
+        GetComponent<SpriteRenderer>().color = myColor;
     }
 
     public void Damage(int amount)
@@ -44,7 +55,7 @@ public class Health : MonoBehaviour
         }
 
         health -= amount;
-        healthBar.SetHealth(health, MAX_HEALTH);
+        healthBar.SetHealth(health, maxHealth);
        
         StartCoroutine(VisualIndicator(Color.red));
 
@@ -61,13 +72,13 @@ public class Health : MonoBehaviour
             throw new System.ArgumentOutOfRangeException("Cannot have negative Damage");
         }
 
-        bool wouldBeOverMaxHealth = health + amount > MAX_HEALTH;
+        bool wouldBeOverMaxHealth = health + amount > maxHealth;
         StartCoroutine(VisualIndicator(Color.green));
 
 
         if (wouldBeOverMaxHealth)
         {
-            health = MAX_HEALTH;
+            health = maxHealth;
         }
         else
         {
@@ -93,7 +104,14 @@ public class Health : MonoBehaviour
                 GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>().updateNumberOfKilledEnemies();
             }
         }
-        Destroy(objectToDestroy);
+        if (objectToDestroy.CompareTag("Player"))
+        {
+            FindObjectOfType<GameManager>().Defeat();
+        }
+        else
+        {
+            Destroy(objectToDestroy);
+        }
     }
 
 }

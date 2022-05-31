@@ -6,7 +6,11 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
-    
+    private void Start()
+    {
+        Time.timeScale = 1.0f;
+    }
+
     public void QuitGame() {
         Application.Quit();
         #if UNITY_EDITOR
@@ -14,7 +18,7 @@ public class MainMenu : MonoBehaviour
         #endif
     }
 
-    public void StartGame() {            
+    public void StartGame() {        
         Dropdown[] dropdowns = FindObjectsOfType<Dropdown>();
         int valueOfLevel = dropdowns[0].value;
         string level = "Level" + (valueOfLevel+1).ToString();

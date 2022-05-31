@@ -25,23 +25,35 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField]
     private float slowStrongEnemyInterval = 10f;
 
-    public int enemiesSpawned = 0;
-    public int MAX_ENEMY_SPAWNED = 5;
+    [SerializeField] 
+    public int maxBasicEnemies = 0;
+    [SerializeField]
+    public int maxFastEnemies = 0;
+    [SerializeField]
+    public int maxSlowEnemies = 0;
+
+
+    int basicEnemiesSpawned = 0;
+    int fastEnemiesSpawned = 0;
+    int slowEnemiesSpawned = 0;
 
     // Start is called before the first frame update
     void Start()
     {
-        StartCoroutine(spawnEnemy(basicEnemyInterval, basicEnemyPrefab));
-        //StartCoroutine(spawnEnemy(fastEnemyInterval, fastEnemyPrefab));
-        //StartCoroutine(spawnEnemy(slowStrongEnemyInterval, slowStrongEnemyPrefab));
+        basicEnemiesSpawned = 0;
+        fastEnemiesSpawned = 0;
+        slowEnemiesSpawned = 0;
+        StartCoroutine(spawnEnemy(basicEnemyInterval, basicEnemyPrefab, maxBasicEnemies, basicEnemiesSpawned));
+        StartCoroutine(spawnEnemy(fastEnemyInterval, fastEnemyPrefab, maxFastEnemies, fastEnemiesSpawned));
+        StartCoroutine(spawnEnemy(slowStrongEnemyInterval, slowStrongEnemyPrefab, maxSlowEnemies, slowEnemiesSpawned));
     }
 
-    private IEnumerator spawnEnemy(float interval, GameObject enemy)
+    private IEnumerator spawnEnemy(float interval, GameObject enemy, int maxEnemiesToSpawn, int enemiesSpawned)
     {
         while (true)
         {
             yield return new WaitForSeconds(interval);
-            if (enemiesSpawned < MAX_ENEMY_SPAWNED)
+            if (enemiesSpawned < maxEnemiesToSpawn)
             {
                 int randSpawnPoint = Random.Range(0, spawnPoints.Length);
 

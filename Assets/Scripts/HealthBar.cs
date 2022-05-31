@@ -6,7 +6,9 @@ using UnityEngine.UI;
 public class HealthBar : MonoBehaviour
 {
     [SerializeField]
-    private Slider slider;
+    private Image maxHP;
+    [SerializeField]
+    private Image currentHP;
 
     [SerializeField]
     private Color low;
@@ -17,18 +19,22 @@ public class HealthBar : MonoBehaviour
     [SerializeField]
     private Vector3 offset;
 
+    private void Awake()
+    {
+        if (transform.parent != null)
+            maxHP.transform.position = Camera.main.WorldToScreenPoint(transform.parent.position + offset);
+    }
+
     public void SetHealth(float health, float maxHealth)
     {
-        slider.gameObject.SetActive(health < maxHealth);
-        slider.value = health;
-        slider.maxValue = maxHealth;
-        
-        slider.fillRect.GetComponentInChildren<Image>().color = Color.Lerp(low, high, slider.normalizedValue);
+        if(health < 0) health = 0;
+        currentHP.transform.localScale = new Vector3(health / maxHealth, currentHP.transform.localScale.y);
+        currentHP.color = Color.Lerp(low, high, health/maxHealth);
     }
 
     private void Update()
     {
         if(transform.parent != null)
-            slider.transform.position = Camera.main.WorldToScreenPoint(transform.parent.position + offset);
+            maxHP.transform.position = Camera.main.WorldToScreenPoint(transform.parent.position + offset);
     }
 }

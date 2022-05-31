@@ -1,29 +1,33 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
     public PlayerController m_player;
-
+    Vector3 cameraDestination;
 
     public GameObject m_door;
     public GameObject victoryScreen;
+    public Text victoryText;
 
     public BossHand leftHand;
     public BossHand rightHand;
-    
+
+
+    private void Start()
+    {
+        Time.timeScale = 1;
+        cameraDestination = Camera.main.transform.position + new Vector3(25,0,0);
+    }
     public IEnumerator DestroyDoor()
     {
-        m_door.GetComponent<SpriteRenderer>().enabled = false;
+        m_door.SetActive(false);
         while (true) {
             if (Vector2.Distance(GameObject.FindGameObjectWithTag("Player").transform.position, m_door.transform.position) < 3.0f)
             {
-                Object.Destroy(m_door);
-
-                GameObject.FindGameObjectWithTag("MainCamera").transform.position = Vector3.Lerp(GameObject.FindGameObjectWithTag("MainCamera").transform.position, new Vector3(270.0f, 0, -10f), 0.1f);
-                StartCoroutine(leftHand.StartAttacking());
-                StartCoroutine(rightHand.StartAttacking());
+                StartCoroutine(TransitionToBoss());
                 break;
             }
             else
@@ -33,9 +37,30 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    IEnumerator TransitionToBoss()
+    {
+        float currentTime = 0;
+        float maxTime = 1;
+        while(currentTime <= maxTime)
+        {
+            currentTime += Time.deltaTime;
+            Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, cameraDestination, currentTime/maxTime);
+            yield return null;
+        }
+        StartCoroutine(leftHand.StartAttacking());
+        StartCoroutine(rightHand.StartAttacking());
+    }
+
     public void Victory()
     {
         victoryScreen.SetActive(true);
-        m_player.gameObject.SetActive(false);
+        Time.timeScale = 0;
+    }
+
+    public void Defeat()
+    {
+        victoryScreen.SetActive(true);
+        victoryText.text = "You lost!";
+        Time.timeScale = 0;
     }
 }

@@ -10,6 +10,8 @@ public class PlayerShootingController : MonoBehaviour
     Rigidbody2D bulletPrefab;
     [SerializeField]
     float bulletSpeed = 10;
+    [SerializeField]
+    int bulletDamage = 10;
 
 
     private void Update()
@@ -36,6 +38,7 @@ public class PlayerShootingController : MonoBehaviour
             float shootAngle = Mathf.Atan2(shootDirection.y, shootDirection.x) * Mathf.Rad2Deg;
             Rigidbody2D bullet = Instantiate(bulletPrefab, weapon.GetChild(0).position, Quaternion.Euler(0, 0, shootAngle));
             bullet.velocity = shootDirection * bulletSpeed;
+            bullet.gameObject.GetComponent<Bullet>().damage = bulletDamage;
         }
     }
 

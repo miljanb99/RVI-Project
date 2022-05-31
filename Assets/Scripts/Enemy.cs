@@ -4,11 +4,6 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    [SerializeField]
-    private int damage = 5;
-
-    [SerializeField]
-    private float speed = 5f;
 
     [SerializeField]
     private EnemyData data;
@@ -24,8 +19,10 @@ public class Enemy : MonoBehaviour
     private float jumpSpeed; 
     Vector3 enemyVelocity;
     Vector2 enemyMoveTarget;
-    bool isFlying;
+    [SerializeField]
+    bool isJumping;
     bool shouldJump;
+    float cooldown = 1;
 
 
     // Start is called before the first frame update
@@ -36,15 +33,31 @@ public class Enemy : MonoBehaviour
         SetEnemyValues();
 
         StartCoroutine(EnemyMovement());
+        StartCoroutine(EnemyJumping());
     }
 
     private void SetEnemyValues()
     {
-        damage = data.damage;
-        speed = data.speed;
-        GetComponent<Health>().setHealth(data.hp);
+        GetComponent<Health>().SetupMaxHP(data.hp);
         gravity = player.GetComponent<PlayerController>().gravity;
         jumpSpeed = player.GetComponent<PlayerController>().jumpSpeed;
+    }
+
+    private IEnumerator EnemyJumping()
+    {
+        if (isJumping)
+        {
+            while (true)
+            {
+                float randomNum = Random.Range(0.0f, 1.0f);
+                if (randomNum < 0.2f)
+                {
+                    shouldJump = true;
+                }
+                yield return new WaitForSeconds(.5f);
+            }
+        }
+        
     }
 
     private IEnumerator EnemyMovement()
@@ -52,13 +65,20 @@ public class Enemy : MonoBehaviour
         while (true)
         {
             enemyMoveTarget = new Vector2((player.transform.position - transform.position).x, 0).normalized;
-            yield return new WaitForSeconds(2);
+            yield return new WaitForSeconds(.5f);
         }
     }
 
     private void FixedUpdate()
     {
-        enemyVelocity.x = enemyMoveTarget.x * speed;
+
+        cooldown -= Time.deltaTime;
+        if(cooldown < 0 && Vector3.Distance(transform.position, player.transform.position) < transform.localScale.x * 1.1f)
+        {
+            cooldown = 1;
+            player.GetComponent<PlayerController>().TakeDamage(data.damage);
+        }
+        enemyVelocity.x = enemyMoveTarget.x * data.speed;
 
         if (controller.collisionInfo.below || controller.collisionInfo.above)
         {
@@ -67,6 +87,7 @@ public class Enemy : MonoBehaviour
         if (shouldJump && controller.collisionInfo.below)
         {
             enemyVelocity.y = jumpSpeed;
+            shouldJump = false;
         }
         enemyVelocity.y += gravity * Time.deltaTime;
 

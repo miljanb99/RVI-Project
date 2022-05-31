@@ -7,7 +7,7 @@ public class Boss : MonoBehaviour
     private int currentWaypointIndex = 0;
 
     [SerializeField]
-    private int damage = 5;
+    public int damage = 5;
 
     private bool flag = false;
     private GameObject player;

@@ -63,9 +63,11 @@ public class PlayerController : MonoBehaviour
 
     public void updateNumberOfKilledEnemies()
     {
+        EnemySpawner enemySpawner = FindObjectOfType<EnemySpawner>();
         numberNumberOfKilledEnemies += 1;
-        if (numberNumberOfKilledEnemies == 5)
+        if (numberNumberOfKilledEnemies >= (enemySpawner.maxBasicEnemies + enemySpawner.maxFastEnemies + enemySpawner.maxSlowEnemies))
         {
+            Debug.Log(numberNumberOfKilledEnemies + " >= " + (enemySpawner.maxBasicEnemies + enemySpawner.maxFastEnemies + enemySpawner.maxSlowEnemies));
             StartCoroutine(m_gameManager.DestroyDoor());
         }
     }
